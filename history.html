@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>歷史賽事｜棒球轉播 LLM Wiki</title>
+<style>
+:root{color-scheme:dark;--bg:#0b1220;--ink:#f2f7ff;--muted:#aec0d4;--blue:#89dbff;--line:#283a50;--panel:#111d2e}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:1rem/1.65 "Noto Sans TC","Microsoft JhengHei","PingFang TC",system-ui,sans-serif}h1,h3,p{margin:0}a{color:var(--blue);text-underline-offset:.24em}.wrap{width:min(1020px,calc(100% - 36px));margin:auto}
+header{border-bottom:1px solid var(--line);background:#101b2c}header .wrap{padding-block:15px}main{padding-block:clamp(32px,7vw,70px)}h1{font-size:clamp(2rem,5vw,3.3rem);line-height:1.18}label{display:block;margin-top:22px;font-weight:700}input{width:min(100%,540px);margin-top:6px;padding:.7rem .9rem;background:var(--panel);color:var(--ink);border:1px solid #526784;border-radius:8px;font:inherit}input:focus-visible,a:focus-visible{outline:2px solid var(--blue);outline-offset:3px}
+#history-status{margin-top:16px;color:var(--muted)}.game{margin-top:18px;padding:clamp(16px,4vw,28px);border:1px solid var(--line);border-left:3px solid var(--blue);border-radius:16px;background:linear-gradient(120deg,#152b42,var(--panel) 75%)}.game h3{margin-top:6px;font-size:1.5rem}.game-meta,.game-status{color:var(--muted)}.links{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:10px;margin-top:14px}.links a{padding:.6rem .85rem;border:1px solid var(--line);border-radius:8px;text-decoration:none}.links a:hover{border-color:var(--blue)}.links small{display:block;color:var(--muted)}
+</style>
+</head>
+<body>
+<header><div class="wrap"><a href="index.html#games">← 回目前場次</a></div></header>
+<main class="wrap">
+<h1>歷史賽事</h1>
+<label for="history-search">搜尋日期、賽事或隊名</label>
+<input id="history-search" type="search" placeholder="例如 2026/11/12、亞冠賽、台灣" aria-controls="history-games">
+<p id="history-status" role="status">尚無歷史賽事。</p>
+<div id="history-games"></div>
+</main>
+<script>
+const list = document.querySelector('#history-games');
+const search = document.querySelector('#history-search');
+const status = document.querySelector('#history-status');
+
+function normalize(value) {
+  return value.normalize('NFKC').toLocaleLowerCase('zh-Hant')
+    .replace(/(\d{4})年\s*/g, '$1-')
+    .replace(/(\d{1,2})\s*月\s*/g, '$1-')
+    .replace(/(\d{1,2})\s*日/g, '$1')
+    .replace(/[\/.]/g, '-')
+    .replace(/(^|[-\s])(0)(?=\d(?:-|\s|$))/g, '$1');
+}
+const cards = Array.from(list.querySelectorAll('article.game')).map(card => {
+  const time = card.querySelector('time').dateTime;
+  return {
+    card,
+    sortTime: Date.parse(time),
+    text: normalize([time.slice(0, 10), card.querySelector('.game-meta').textContent, card.querySelector('h3').textContent].join(' '))
+  };
+}).sort((a, b) => b.sortTime - a.sortTime);
+list.append(...cards.map(({card}) => card));
+
+function filter() {
+  const terms = normalize(search.value).trim().split(/\s+/).filter(Boolean);
+  let count = 0;
+  for (const {card, text} of cards) {
+    card.hidden = !terms.every(term => text.includes(term));
+    if (!card.hidden) count += 1;
+  }
+  status.textContent = !cards.length ? '尚無歷史賽事。' : count ? `顯示 ${count} 場賽事。` : '找不到符合條件的賽事。';
+}
+search.addEventListener('input', filter);
+filter();
+</script>
+</body>
+</html>

@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="棒球轉播 AI Agent 功能導覽。開新場次、製作賽前備稿、即時口播與賽後回顧。">
+<title>棒球轉播 AI Agent｜功能導覽</title>
+<style>
+:root{color-scheme:dark;--bg:#0b1220;--panel:#111d2e;--line:#283a50;--ink:#f2f7ff;--muted:#aec0d4;--blue:#89dbff;--red:#ff9eae;--radius:16px}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:1rem/1.65 "Noto Sans TC","Microsoft JhengHei","PingFang TC",system-ui,sans-serif}a{color:var(--blue);text-underline-offset:.24em}button{font:inherit;cursor:pointer}a:focus-visible,button:focus-visible{outline:2px solid var(--blue);outline-offset:4px}img{display:block;max-width:100%}h1,h2,h3,p,blockquote{margin:0}h2{font-size:clamp(1.5rem,3vw,2.2rem);line-height:1.25}h3{font-size:1.16rem;line-height:1.4}.wrap{width:min(1100px,calc(100% - 40px));margin-inline:auto}
+.top{border-bottom:1px solid var(--line)}.top .wrap{display:flex;min-height:66px;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding-block:10px}.brand{font-weight:800;color:var(--ink);text-decoration:none}.top nav{display:flex;gap:clamp(12px,3vw,28px);flex-wrap:wrap}.top nav a{font-size:.9rem;color:var(--muted);text-decoration:none}.top nav a:hover{color:var(--ink)}
+.hero{position:relative;overflow:hidden;border-bottom:1px solid var(--line);background:linear-gradient(116deg,#12243b 0%,#0e192a 66%,#291929 100%)}.hero .wrap{display:grid;grid-template-columns:1.12fr .88fr;gap:26px;align-items:center;padding-block:clamp(44px,8vw,98px)}h1{font-size:clamp(2.5rem,6.4vw,5rem);line-height:1.08;letter-spacing:-.045em;font-weight:850}h1 span{color:var(--blue)}.intro{max-width:37em;color:#c7d7e8;margin-top:20px}.actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:24px}.button{display:inline-block;border:1px solid #48617e;border-radius:8px;background:#17283e;padding:.55rem .95rem;color:var(--ink);font-weight:700;text-decoration:none}.button:hover{background:#233a54}.button.primary{background:var(--blue);border-color:var(--blue);color:#081625}.button.primary:hover{background:#b3e8ff}
+.hero-art{min-width:0;display:flex;justify-content:center;align-items:center;gap:12px;padding:24px 0}.hero-art img{width:min(40%,170px);aspect-ratio:1;filter:drop-shadow(0 10px 20px #0007)}.hero-art img:first-child{transform:translateY(-14px) rotate(-9deg)}.hero-art img:last-child{transform:translateY(14px) rotate(9deg)}.hero-art span{font-size:clamp(1rem,3vw,2rem);font-weight:900;font-style:italic;color:#c5d4e6}
+section.wrap{padding-block:clamp(30px,5vw,58px)}.section-intro{color:var(--muted);margin-top:8px}.steps,.links{display:grid;gap:14px;margin-top:18px}.steps{grid-template-columns:repeat(2,minmax(0,1fr))}.card{display:flex;flex-direction:column;gap:9px;padding:18px;border:1px solid var(--line);border-radius:var(--radius);background:var(--panel)}.card p{color:var(--muted)}.prompt{color:#d4edff!important;border-left:2px solid var(--blue);background:#0b1525;padding:.55rem .75rem;margin-top:auto;overflow-wrap:anywhere}.copy{align-self:flex-start;font-size:.875rem;padding:.32rem .65rem}
+.demo{display:grid;grid-template-columns:.65fr 1.35fr;gap:24px;padding:clamp(18px,4vw,38px);border-radius:var(--radius);background:linear-gradient(130deg,#132943,#111d2e);border:1px solid var(--line)}.demo img{width:112px;margin-bottom:12px}.demo .button{margin-top:14px}.transcript{margin:0;padding:0;list-style:none}.transcript li{border-left:2px solid #4d7193;padding:8px 14px;margin:0 0 8px;background:#0c1727}.transcript li:last-child{margin-bottom:0}.transcript strong{color:var(--blue);font-size:.86rem}.transcript p{margin-top:2px}.transcript blockquote{margin-top:2px}.links{grid-template-columns:repeat(3,minmax(0,1fr))}.links a{display:block;padding:16px;border:1px solid var(--line);border-radius:10px;background:var(--panel);text-decoration:none;font-weight:750}.links a:hover{border-color:var(--blue)}.links small{display:block;font-weight:400;color:var(--muted)}footer{border-top:1px solid var(--line);padding:18px 0 24px;color:var(--muted)}footer .wrap{display:flex;gap:18px;flex-wrap:wrap}
+@media(max-width:700px){.hero .wrap,.demo{grid-template-columns:1fr}.hero-art{padding:4px 0 12px}.hero-art img{width:min(38%,128px)}.steps,.links{grid-template-columns:1fr}.wrap{width:calc(100% - 28px)}}
+.game{margin-top:18px;padding:clamp(18px,4vw,32px);border:1px solid var(--line);border-left:3px solid var(--blue);border-radius:var(--radius);background:linear-gradient(120deg,#152b42,var(--panel) 75%)}
+.game h3{margin-top:6px;font-size:clamp(1.35rem,3vw,2rem)}.game-meta,.game-status{color:var(--muted)}.game-meta{font-size:.92rem}.game-status{margin-top:6px}
+.section-heading{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+</style>
+</head>
+<body>
+<header class="top"><div class="wrap">
+<a class="brand" href="#top">棒球轉播 LLM Wiki</a>
+<nav aria-label="主導覽"><a href="#workflow">使用流程</a><a href="#games">賽事資料庫</a><a href="#demo">口播示範</a></nav>
+</div></header>
+<main id="top">
+<div class="hero"><div class="wrap">
+<div><h1>棒球轉播<br><span>AI Agent</span></h1><p class="intro">給主播與轉播團隊的工作導覽。從建立賽事資料、準備上場口播，到把精采 play 整理成賽後回顧。</p><div class="actions"><a class="button primary" href="#workflow">查看使用流程</a><a class="button" href="index.md">開啟 Wiki 索引</a></div></div>
+<div class="hero-art" aria-hidden="true"><img src="assets/apbc-2026/tpe/54.svg" alt=""><span>VS</span><img src="assets/apbc-2026/jpn/21.svg" alt=""></div>
+</div></div>
+
+<section class="wrap" id="workflow">
+<h2>從開新場次到賽後回顧</h2>
+<p class="section-intro">複製範例指令，換成你的賽事資訊，再貼到助理對話。</p>
+<div class="steps">
+<article class="card"><h3>開新場次</h3><p>提供聯盟或賽事名稱、日期及對戰隊伍。助理核對場次、登錄來源，並將新資料補入 Wiki 既有條目。</p><p class="prompt" id="prompt-game">請建立這場比賽的 Wiki 資料：中職｜YYYY/MM/DD｜樂天桃猿 vs 中信兄弟。</p><button type="button" class="button copy" data-copy="prompt-game" aria-label="複製開新場次指令">複製指令</button></article>
+<article class="card"><h3>準備賽前備稿</h3><p>完成場次匯入後，助理接著產出賽前 notes、逐頁講稿和離線 HTML，並同步加入賽事資料庫。</p><p class="prompt" id="prompt-preview">請更新這場的賽前備稿與簡報。</p><button type="button" class="button copy" data-copy="prompt-preview" aria-label="複製賽前備稿指令">複製指令</button></article>
+<article class="card"><h3>取得即時口播</h3><p>回報球員和場上事件，先取得可直接念的句子。助理將事件與口播寫入當場 notes，並追問缺少的局數。</p><p class="prompt" id="prompt-live">五局上半，郭天信在右外野完成接殺。</p><button type="button" class="button copy" data-copy="prompt-live" aria-label="複製即時口播指令">複製指令</button></article>
+<article class="card"><h3>製作賽後回顧</h3><p>你確認比賽已結束後，助理更新賽事狀態。若同時要求回顧，助理會從 notes 整理精采片段，完成後將 HTML 加到同一張賽事卡。</p><p class="prompt" id="prompt-recap">這場比賽已結束，請做賽後回顧。</p><button type="button" class="button copy" data-copy="prompt-recap" aria-label="複製賽後回顧指令">複製指令</button></article>
+</div>
+<p id="copy-status" role="status"></p>
+</section>
+
+<section class="wrap" id="demo">
+<div class="demo">
+<div><img src="assets/apbc-2026/tpe/2.svg" alt="台灣代表隊 2 號球衣圖示"><h2>試看口播流程</h2><p class="section-intro">固定情境示範。局數與事件為示意。</p><button type="button" class="button primary" id="demo-next">下一步</button></div>
+<ol class="transcript" id="transcript" aria-live="polite">
+<li><strong>主播回報</strong><p>郭天信完成接殺。</p></li>
+<li hidden><strong>助理口播與追問</strong><blockquote>郭天信把球接住，這個出局數拿下來了！他也拿過中職外野金手套，這球正好讓我們看到他的守備。</blockquote><p>這球是第幾局上半或下半？</p></li>
+<li hidden><strong>主播補充</strong><p>五局上半。</p></li>
+<li hidden><strong>補記同一筆 notes</strong><p>五局上半 · 郭天信 · 接殺</p><p>保存口播原句與<a href="wiki/players/tpe/2-郭天信.md">金手套背景來源</a>。</p></li>
+</ol>
+</div>
+</section>
+
+<section class="wrap" id="games">
+<div class="section-heading"><h2>賽事資料庫</h2><a class="button" href="history.html">歷史賽事</a></div>
+<article class="game" id="game-2026-11-12-tpe-jpn" aria-labelledby="game-title-2026-11-12-tpe-jpn">
+<p class="game-meta">2026 亞冠賽 · <time datetime="2026-11-12T18:00:00+08:00">11 月 12 日 18:00（台灣時間）</time></p>
+<h3 id="game-title-2026-11-12-tpe-jpn">台灣 vs 日本</h3>
+<p class="game-status">賽前成品已就緒 · 比賽結束狀態待使用者確認</p>
+<div class="links">
+<a href="notes/2026-11-12-tpe-jpn.md">賽前 notes<small>開場口播、球員看點與兩隊 56 人名單</small></a>
+<a href="slides/2026-11-12-tpe-jpn.md">逐頁講稿<small>畫面文字、講稿提示與名單附錄</small></a>
+<a href="presentation/2026-11-12-tpe-jpn.html">賽前 HTML 簡報<small>12 頁，可離線播放</small></a>
+</div>
+</article>
+</section>
+
+<section class="wrap" id="examples">
+<h2>回顧示範</h2>
+<div class="links">
+<a href="presentation/2026-11-12-tpe-jpn-recap-sample.html">賽後回顧 HTML 樣稿<small>精采片段示意與全場時間軸</small></a>
+</div>
+</section>
+</main>
+<footer><div class="wrap"><a href="README.md">使用說明</a><a href="AGENTS.md">維護規範</a><a href="raw/sources.md">來源與取用條件</a></div></footer>
+<script>
+const status = document.querySelector('#copy-status');
+for (const button of document.querySelectorAll('[data-copy]')) {
+  button.addEventListener('click', async () => {
+    const prompt = document.getElementById(button.dataset.copy);
+    const value = prompt.textContent.trim();
+    try {
+      await navigator.clipboard.writeText(value);
+      status.textContent = '已複製指令。';
+    } catch {
+      const selection = window.getSelection();
+      const range = document.createRange();
+      range.selectNodeContents(prompt);
+      selection.removeAllRanges();
+      selection.addRange(range);
+      status.textContent = document.execCommand('copy') ? '已複製指令。' : '已選取指令，可按 Ctrl+C 或 ⌘C 複製。';
+    }
+  });
+}
+const moments = Array.from(document.querySelectorAll('#transcript li'));
+const demoNext = document.querySelector('#demo-next');
+let step = 0;
+demoNext.addEventListener('click', () => {
+  step = (step + 1) % moments.length;
+  moments.forEach((moment, index) => { moment.hidden = index > step; });
+  demoNext.textContent = step === moments.length - 1 ? '重新示範' : '下一步';
+});
+</script>
+</body>
+</html>
