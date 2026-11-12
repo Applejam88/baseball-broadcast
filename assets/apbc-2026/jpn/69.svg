@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="144" height="144" role="img">
+  <title>辰見鴻之介 #69</title>
+  <defs><clipPath id="tile"><rect x="12" y="12" width="488" height="488" rx="84"/></clipPath></defs>
+  <g clip-path="url(#tile)">
+    <rect x="12" y="12" width="488" height="488" fill="#20243B"/>
+    <path d="M500 112V500H112Z" fill="#A62E46"/>
+    <polygon points="178,127 218,108 232,125 280,125 294,108 334,127 394,188 350,240 325,221 325,367 187,367 187,221 162,240 118,188" transform="translate(0 9)" fill="#0A1628" opacity=".4"/>
+    <polygon points="178,127 218,108 232,125 280,125 294,108 334,127 394,188 350,240 325,221 325,367 187,367 187,221 162,240 118,188" fill="#FFF4F2"/>
+    <path d="M218 108L232 125H280L294 108L283 147H229Z" fill="#A62E46"/>
+    <path d="M130 174L173 224L162 240L118 188ZM382 174L339 224L350 240L394 188Z" fill="#A62E46"/>
+    <path d="M199 353H313V358H199Z" fill="#A62E46"/>
+    <text x="256" y="291" text-anchor="middle" font-family="Arial, sans-serif" font-weight="700" font-size="96" fill="#20243B">69</text>
+  </g>
+</svg>
